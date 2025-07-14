@@ -14,9 +14,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       meta: [
-        { name: 'theme-color', content: '#EA1D2C' },
         { name: 'apple-mobile-web-app-capable', content: 'yes' },
-        { name: 'apple-mobile-web-app-status-bar-style', content: 'default' },
         { name: 'apple-mobile-web-app-title', content: 'Qual a Boa' },
       ],
       link: [
@@ -45,8 +43,8 @@ export default defineNuxtConfig({
       name: 'Qual a Boa',
       short_name: 'Qual a Boa',
       description: 'Descubra o melhor do seu bairro!',
-      background_color: '#EA1D2C',
-      theme_color: '#EA1D2C',
+      background_color: '#FFFFFF',
+      theme_color: '#FFFFFF',
       lang: 'pt-BR',
       display: 'standalone',
       start_url: '/',

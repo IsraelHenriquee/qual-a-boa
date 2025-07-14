@@ -1,0 +1,4 @@
+/* Safe area para iOS nativo (Capacitor) */
+.safe-area-top {
+  padding-top: env(safe-area-inset-top, 20px);
+}

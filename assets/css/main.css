@@ -15,6 +15,22 @@
   box-sizing: border-box;
 }
 
+/* Safe Area para dispositivos móveis nativos */
+.safe-area-top {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Aplicar safe area apenas em dispositivos nativos */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .native-safe-area {
+    padding-top: env(safe-area-inset-top);
+  }
+}
+
 html {
   height: 100%;
 }
