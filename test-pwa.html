@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste PWA - Qual a Boa</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #EA1D2C;
+            margin-bottom: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .status {
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .success { color: #28a745; }
+        .error { color: #dc3545; }
+        .info { color: #17a2b8; }
+        button {
+            background: #EA1D2C;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #d11721;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Teste PWA - Qual a Boa</h1>
+        
+        <div class="test-section">
+            <h3>📱 Verificação do Manifest</h3>
+            <div id="manifest-status">Verificando...</div>
+            <div id="manifest-details"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>⚙️ Verificação do Service Worker</h3>
+            <div id="sw-status">Verificando...</div>
+            <div id="sw-details"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>📲 Instalação PWA</h3>
+            <div id="install-status">Verificando...</div>
+            <button id="install-btn" style="display: none;">Instalar PWA</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔄 Atualização PWA</h3>
+            <div id="update-status">Verificando...</div>
+            <button id="update-btn" style="display: none;">Atualizar PWA</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>🌐 Links de Navegação</h3>
+            <a href="http://localhost:3000/" target="_blank">
+                <button>Abrir App Principal</button>
+            </a>
+            <a href="http://localhost:3000/download" target="_blank">
+                <button>Página de Download</button>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        let deferredPrompt = null;
+        
+        // Testar Manifest
+        async function testManifest() {
+            try {
+                const response = await fetch('http://localhost:3000/manifest.webmanifest');
+                if (response.ok) {
+                    const manifest = await response.json();
+                    document.getElementById('manifest-status').innerHTML = 
+                        '<span class="status success">✅ Manifest encontrado!</span>';
+                    document.getElementById('manifest-details').innerHTML = 
+                        `<pre>${JSON.stringify(manifest, null, 2)}</pre>`;
+                } else {
+                    throw new Error(`Status: ${response.status}`);
+                }
+            } catch (error) {
+                document.getElementById('manifest-status').innerHTML = 
+                    '<span class="status error">❌ Erro ao carregar manifest</span>';
+                document.getElementById('manifest-details').innerHTML = 
+                    `<div class="error">Erro: ${error.message}</div>`;
+            }
+        }
+        
+        // Testar Service Worker
+        function testServiceWorker() {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(registrations => {
+                    if (registrations.length > 0) {
+                        document.getElementById('sw-status').innerHTML = 
+                            '<span class="status success">✅ Service Worker ativo!</span>';
+                        document.getElementById('sw-details').innerHTML = 
+                            `<div class="info">Registros encontrados: ${registrations.length}</div>`;
+                        
+                        registrations.forEach((registration, index) => {
+                            const details = document.getElementById('sw-details');
+                            details.innerHTML += `
+                                <div class="info">
+                                    SW ${index + 1}: ${registration.scope}<br>
+                                    Estado: ${registration.active ? 'Ativo' : 'Inativo'}
+                                </div>
+                            `;
+                        });
+                    } else {
+                        document.getElementById('sw-status').innerHTML = 
+                            '<span class="status error">❌ Nenhum Service Worker encontrado</span>';
+                    }
+                });
+            } else {
+                document.getElementById('sw-status').innerHTML = 
+                    '<span class="status error">❌ Service Worker não suportado</span>';
+            }
+        }
+        
+        // Testar Instalação
+        function testInstall() {
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                document.getElementById('install-status').innerHTML = 
+                    '<span class="status success">✅ PWA pode ser instalado!</span>';
+                document.getElementById('install-btn').style.display = 'inline-block';
+            });
+            
+            // Verificar se já está instalado
+            if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) {
+                document.getElementById('install-status').innerHTML = 
+                    '<span class="status info">📱 PWA já está instalado!</span>';
+            } else {
+                setTimeout(() => {
+                    if (!deferredPrompt) {
+                        document.getElementById('install-status').innerHTML = 
+                            '<span class="status info">ℹ️ Prompt de instalação não disponível</span>';
+                    }
+                }, 2000);
+            }
+        }
+        
+        // Instalar PWA
+        document.getElementById('install-btn').addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const choiceResult = await deferredPrompt.userChoice;
+                if (choiceResult.outcome === 'accepted') {
+                    document.getElementById('install-status').innerHTML = 
+                        '<span class="status success">✅ PWA instalado com sucesso!</span>';
+                } else {
+                    document.getElementById('install-status').innerHTML = 
+                        '<span class="status info">ℹ️ Instalação cancelada pelo usuário</span>';
+                }
+                deferredPrompt = null;
+                document.getElementById('install-btn').style.display = 'none';
+            }
+        });
+        
+        // Testar Atualização
+        function testUpdate() {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    document.getElementById('update-status').innerHTML = 
+                        '<span class="status success">✅ Atualização disponível!</span>';
+                    document.getElementById('update-btn').style.display = 'inline-block';
+                });
+                
+                document.getElementById('update-status').innerHTML = 
+                    '<span class="status info">ℹ️ Monitorando atualizações...</span>';
+            } else {
+                document.getElementById('update-status').innerHTML = 
+                    '<span class="status error">❌ Service Worker não suportado</span>';
+            }
+        }
+        
+        // Atualizar PWA
+        document.getElementById('update-btn').addEventListener('click', () => {
+            window.location.reload();
+        });
+        
+        // Executar testes
+        testManifest();
+        testServiceWorker();
+        testInstall();
+        testUpdate();
+    </script>
+</body>
+</html>
