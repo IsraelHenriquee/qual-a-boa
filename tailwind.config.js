@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [],
+  darkMode: 'class', // Ativa o modo escuro com classe
   theme: {
     extend: {
       colors: {
@@ -23,18 +24,21 @@ export default {
         },
         background: {
           light: '#FFFFFF', // branco
-          dark: '#181818', // fundo escuro para dark mode
+          dark: '#121212', // fundo escuro para dark mode
           muted: '#F5F5F5', // fundo neutro
         },
+        surface: {
+          light: '#F8F9FA',
+          dark: '#1E1E1E',
+        },
         text: {
-          light: '#181818', // texto escuro para light mode
-          dark: '#FFFFFF', // texto claro para dark mode
-          muted: '#757575', // texto secundário
+          primary: 'rgb(var(--text-primary) / <alpha-value>)',
+          secondary: 'rgb(var(--text-secondary) / <alpha-value>)',
+          muted: 'rgb(var(--text-muted) / <alpha-value>)',
         },
-        border: {
-          light: '#E0E0E0',
-          dark: '#333333',
-        },
+        success: '#10B981',
+        error: '#EF4444',
+        warning: '#F59E0B',
       },
     },
   },

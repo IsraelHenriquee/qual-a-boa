@@ -5,6 +5,8 @@
       :key="cat.id"
       :label="cat.categoria"
       :icone="cat.icone"
+      :ativo="categoriaAtiva === cat.id"
+      @click="$emit('categoria-selecionada', cat.id)"
     />
   </div>
 </template>
@@ -15,6 +17,12 @@ import { useCategoriasStore } from '~/stores/categorias'
 import IconeQuadrado from '~/components/global/IconeQuadrado.vue'
 import { useEstabelecimentos } from '~/composables/useEstabelecimentos'
 import { onMounted } from 'vue'
+
+defineProps({
+  categoriaAtiva: { type: Number, default: undefined }
+})
+
+defineEmits(['categoria-selecionada'])
 
 const categoriasStore = useCategoriasStore()
 const { categorias } = storeToRefs(categoriasStore)

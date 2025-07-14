@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-4 w-full">
+  <div class="flex flex-col w-full px-2">
     <CardEstabelecimento
       v-for="estab in estabelecimentos"
       :key="estab.id"

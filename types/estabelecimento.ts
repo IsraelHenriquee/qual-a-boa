@@ -4,13 +4,24 @@ export interface Categoria {
   icone?: string | null // Nome do ícone flat vindo do banco
 }
 
+export interface Subcategoria {
+  id: number
+  subcategoria: string
+}
+
 export interface Estabelecimento {
   id: number
   nome: string
+  descricao: string | null
   imagem_capa: string | null
   endereco: string | null
   categoria: string | null
+  categoria_id: number | null
   is_open: boolean
+  horario_abertura: string | null
+  horario_fechamento: string | null,
+  bairro: string | null,
+  subcategorias: Subcategoria[]
 }
 
 export interface BuscarEstabelecimentosResponse {

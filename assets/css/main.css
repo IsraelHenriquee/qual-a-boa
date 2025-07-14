@@ -1,0 +1,52 @@
+:root {
+  --text-primary: 24 24 27; /* zinc-800 */
+  --text-secondary: 113 113 122; /* zinc-500 */
+  --text-muted: 161 161 170; /* zinc-400 */
+}
+
+.dark {
+  --text-primary: 244 244 245; /* zinc-100 */
+  --text-secondary: 161 161 170; /* zinc-400 */
+  --text-muted: 113 113 122; /* zinc-500 */
+}
+
+/* Reset e estilos globais */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: theme('colors.background.light');
+  color: theme('colors.text.primary');
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dark body {
+  background-color: theme('colors.background.dark');
+}
+
+/* Scrollbar customization */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: theme('colors.text.muted');
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: theme('colors.text.secondary');
+}

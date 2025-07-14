@@ -1,49 +1,89 @@
 <template>
-  <div class="bg-background-light dark:bg-background-dark rounded-xl shadow-sm overflow-hidden mb-3 mx-4">
-    <!-- Imagem com altura maior -->
-    <div class="relative h-40 overflow-hidden">
+  <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-md overflow-hidden mb-4 border border-gray-100 dark:border-gray-800 transition-all duration-200 hover:shadow-lg">
+    
+    <!-- Imagem limpa sem overlays -->
+    <div class="relative h-48 overflow-hidden">
       <img
         v-if="estabelecimento.imagem_capa"
         :src="estabelecimento.imagem_capa"
         :alt="estabelecimento.nome"
         class="w-full h-full object-cover"
       />
-      <div v-else class="w-full h-full bg-surface-light dark:bg-surface-dark flex items-center justify-center">
-        <span class="text-text-muted text-sm">Sem imagem</span>
+      <div v-else class="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center">
+        <div class="text-center">
+          <div class="text-3xl mb-2">🏪</div>
+          <span class="text-gray-500 dark:text-gray-400 text-sm">Sem imagem</span>
+        </div>
       </div>
       
-      <!-- Status overlay -->
-      <div class="absolute top-2 right-2">
-        <span 
-          :class="estabelecimento.is_open ? 'bg-success text-white' : 'bg-error text-white'" 
-          class="px-2 py-1 rounded-md text-xs font-medium"
+      <!-- Apenas status badge no canto -->
+      <div class="absolute top-3 right-3">
+        <div 
+          :class="estabelecimento.is_open ? 'bg-green-500' : 'bg-red-500'"
+          class="px-3 py-1 rounded-full shadow-lg"
         >
-          {{ estabelecimento.is_open ? 'ABERTO' : 'FECHADO' }}
-        </span>
-      </div>
-      
-      <!-- Categoria badge -->
-      <div class="absolute top-2 left-2">
-        <span class="bg-primary/90 text-white px-2 py-1 rounded-md text-xs font-medium">
-          {{ estabelecimento.categoria }}
-        </span>
+          <span class="text-white font-bold text-xs">
+            {{ estabelecimento.is_open ? 'ABERTO' : 'FECHADO' }}
+          </span>
+        </div>
       </div>
     </div>
     
-    <!-- Conteúdo do card -->
-    <div class="p-4">
-      <!-- Nome do estabelecimento -->
-      <h3 class="text-base font-semibold text-text-primary mb-2 line-clamp-1">
-        {{ estabelecimento.nome }}
-      </h3>
+    <!-- Conteúdo principal -->
+    <div class="p-4 space-y-3">
       
-      <!-- Endereço -->
-      <div class="flex items-center gap-2">
-        <span class="text-text-muted text-sm">📍</span>
-        <p class="text-sm text-text-secondary line-clamp-1 flex-1">
-          {{ estabelecimento.endereco }}
-        </p>
+      <!-- Nome do estabelecimento -->
+      <div class="flex items-start justify-between">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white leading-tight flex-1">
+          {{ estabelecimento.nome }}
+        </h3>
+        <!-- Categoria no canto direito -->
+        <span class="bg-primary/10 text-primary px-2 py-1 rounded-md text-xs font-medium ml-2 flex-shrink-0">
+          {{ estabelecimento.categoria }}
+        </span>
       </div>
+      
+      <!-- Descrição -->
+      <p v-if="estabelecimento.descricao" class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+        {{ truncarTexto(estabelecimento.descricao, 100) }}
+      </p>
+      
+      <!-- Bairro e Horário em container -->
+      <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-100 dark:border-gray-700">
+        <!-- Bairro -->
+        <div class="flex items-center gap-2">
+          <span class="text-primary text-sm">📍</span>
+          <span class="text-gray-700 dark:text-gray-300 text-sm font-medium">
+            {{ estabelecimento.bairro }}
+          </span>
+        </div>
+        
+        <!-- Horário -->
+        <div v-if="estabelecimento.horario_abertura && estabelecimento.horario_fechamento" class="flex items-center gap-2">
+          <span class="text-primary text-sm">🕐</span>
+          <span class="text-gray-700 dark:text-gray-300 text-sm font-medium">
+            {{ formatarHorario(estabelecimento.horario_abertura) }} - {{ formatarHorario(estabelecimento.horario_fechamento) }}
+          </span>
+        </div>
+      </div>
+      
+      <!-- Subcategorias -->
+      <div v-if="estabelecimento.subcategorias && estabelecimento.subcategorias.length > 0" class="flex flex-wrap gap-2 pt-2">
+        <span 
+          v-for="(sub, index) in estabelecimento.subcategorias.slice(0, 3)" 
+          :key="sub.id"
+          class="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 px-3 py-1 rounded-full text-xs font-medium"
+        >
+          {{ sub.subcategoria }}
+        </span>
+        <span 
+          v-if="estabelecimento.subcategorias.length > 3"
+          class="bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 px-3 py-1 rounded-full text-xs"
+        >
+          +{{ estabelecimento.subcategorias.length - 3 }} mais
+        </span>
+      </div>
+      
     </div>
   </div>
 </template>
@@ -52,14 +92,13 @@
 import type { Estabelecimento } from '~/types/estabelecimento'
 
 defineProps<{ estabelecimento: Estabelecimento }>()
-</script>
 
-<style scoped>
-.line-clamp-1 {
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+const truncarTexto = (texto: string, limite: number): string => {
+  if (texto.length <= limite) return texto
+  return texto.substring(0, limite).trim() + '...'
 }
-</style>
+
+const formatarHorario = (horario: string): string => {
+  return horario.substring(0, 5)
+}
+</script>

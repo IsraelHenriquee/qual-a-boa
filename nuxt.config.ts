@@ -10,6 +10,7 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@vite-pwa/nuxt',
   ],
+  css: ['~/assets/css/main.css'],
   app: {
     head: {
       meta: [
