@@ -93,7 +93,7 @@ const estabelecimentosOriginais = ref<Estabelecimento[]>([])
 const loading = ref(false)
 const searchQuery = ref('')
 const categoriaFiltro = ref<number | undefined>(undefined)
-const filtroAbertos = ref(false)
+const filtroAbertos = ref(true)
 const showScrollToTop = ref(false)
 const scrollContainer = ref<HTMLElement>()
 const { buscarEstabelecimentos } = useEstabelecimentos()
@@ -111,14 +111,14 @@ watch(filtroAbertos, () => {
 const filtrarEstabelecimentos = (query: string) => {
   let base = [...estabelecimentosOriginais.value]
   
+  // Aplica filtro de abertos PRIMEIRO (já que é padrão)
+  if (filtroAbertos.value) {
+    base = base.filter(est => est.is_open === true)
+  }
+  
   // Aplica filtro de categoria se selecionado
   if (categoriaFiltro.value) {
     base = base.filter(est => est.categoria_id === categoriaFiltro.value)
-  }
-  
-  // Aplica filtro de abertos se ativo
-  if (filtroAbertos.value) {
-    base = base.filter(est => est.is_open === true)
   }
   
   // Aplica filtro de busca textual se houver
@@ -126,7 +126,8 @@ const filtrarEstabelecimentos = (query: string) => {
     const queryLower = query.trim().toLowerCase()
     base = base.filter(est => 
       est.nome.toLowerCase().includes(queryLower) ||
-      (est.descricao && est.descricao.toLowerCase().includes(queryLower))
+      (est.descricao && est.descricao.toLowerCase().includes(queryLower)) ||
+      (est.bairro && est.bairro.toLowerCase().includes(queryLower))
     )
   }
   
@@ -171,7 +172,8 @@ onMounted(async () => {
     const resp = await buscarEstabelecimentos()
     if (resp.success) {
       estabelecimentosOriginais.value = resp.data
-      estabelecimentos.value = [...resp.data]
+      // Aplica filtro padrão (abertos) na inicialização
+      filtrarEstabelecimentos(searchQuery.value)
     }
   } finally {
     loading.value = false

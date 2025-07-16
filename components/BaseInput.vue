@@ -3,6 +3,8 @@
     <label v-if="label" class="block mb-1 text-sm font-medium text-text-light dark:text-text-dark">{{ label }}</label>
     <div class="relative">
       <input
+        :value="modelValue"
+        @input="$emit('update:modelValue', $event.target.value)"
         v-bind="$attrs"
         :class="[
           'w-full px-3 py-2 border rounded-md outline-none transition-all duration-200',
@@ -36,5 +38,8 @@
 defineProps({
   label: String,
   error: String,
+  modelValue: [String, Number]
 })
+
+defineEmits(['update:modelValue'])
 </script>
