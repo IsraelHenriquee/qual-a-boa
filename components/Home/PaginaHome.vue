@@ -1,6 +1,6 @@
 <template>
   <!-- Página Home -->
-  <div class="overflow-y-auto h-screen pb-20" style="scroll-behavior: smooth;" @scroll="onScroll" ref="scrollContainer">
+  <div class="overflow-y-auto pb-16 scroll-container" style="scroll-behavior: smooth; height: calc(100vh - 80px);" @scroll="onScroll" ref="scrollContainer">
     <!-- Header com título e localização -->
     <div class="p-4 pt-6">
       <div class="flex items-center justify-between mb-2">
@@ -24,7 +24,8 @@
           <Switch
             v-model="filtroAbertos"
             :class="filtroAbertos ? 'bg-green-500' : 'bg-gray-200 dark:bg-gray-700'"
-            class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+            class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-0"
+            @click="$event.target.blur()"
           >
             <span
               :class="filtroAbertos ? 'translate-x-5' : 'translate-x-0'"
@@ -35,10 +36,12 @@
       </div>
       
       <!-- Input de pesquisa -->
-      <BaseSearch 
+      <BaseInput 
         v-model="searchQuery"
         placeholder="Procurar eventos, bares ou baladas..."
-        @search="handleSearch"
+        :clearable="true"
+        icon="search"
+        @clear="searchQuery = ''"
         class="mt-4"
       />
     </div>
@@ -52,7 +55,7 @@
     </div>
     
     <!-- Lista de estabelecimentos -->
-    <div class="mt-4 pb-8">
+    <div class="mt-4 pb-4">
       <ListaEstabelecimentos :estabelecimentos="estabelecimentos" />
     </div>
     
@@ -84,7 +87,7 @@ import { ref, onMounted, watch } from 'vue'
 import { Switch } from '@headlessui/vue'
 import ListaCategorias from '~/components/Home/ListaCategorias.vue'
 import ListaEstabelecimentos from '~/components/Home/ListaEstabelecimentos.vue'
-import BaseSearch from '~/components/BaseSearch.vue'
+import BaseInput from '~/components/BaseInput.vue'
 import { useEstabelecimentos } from '~/composables/useEstabelecimentos'
 import type { Estabelecimento } from '~/types/estabelecimento'
 

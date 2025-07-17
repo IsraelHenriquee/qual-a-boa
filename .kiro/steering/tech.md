@@ -21,6 +21,10 @@
 - **Supabase** - Backend-as-a-Service for auth and database
 - **Pinia** - State management
 
+## UI & Icons
+- **@headlessui/vue** - Componentes acessíveis sem estilo
+- **@phosphor-icons/vue** - Biblioteca de ícones
+
 ## Development Tools
 - **ESLint** - Code linting with Nuxt ESLint config
 - **PostCSS** - CSS processing

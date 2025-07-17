@@ -35,6 +35,12 @@ export default {
           primary: 'rgb(var(--text-primary) / <alpha-value>)',
           secondary: 'rgb(var(--text-secondary) / <alpha-value>)',
           muted: 'rgb(var(--text-muted) / <alpha-value>)',
+          light: '#1F2937', // gray-800 para modo claro
+          dark: '#F9FAFB',  // gray-50 para modo escuro
+        },
+        border: {
+          light: '#E5E7EB', // gray-200 para modo claro
+          dark: '#374151',  // gray-700 para modo escuro
         },
         success: '#10B981',
         error: '#EF4444',

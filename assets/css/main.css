@@ -1,3 +1,6 @@
+/* Importa o arquivo que desativa o efeito de bounce */
+@import './no-bounce.css';
+
 :root {
   --text-primary: 24 24 27; /* zinc-800 */
   --text-secondary: 113 113 122; /* zinc-500 */
@@ -33,6 +36,7 @@
 
 html {
   height: 100%;
+  touch-action: manipulation; /* Desativa o zoom com duplo clique */
 }
 
 body {

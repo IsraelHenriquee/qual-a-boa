@@ -174,6 +174,50 @@ if (!usuario.value?.eAdmin) {
 // NOTE: Esta função será depreciada na v2.0
 ```
 
+## Acessibilidade
+
+### ARIA Labels
+- Sempre adicionar `aria-label` em botões sem texto
+- Usar `aria-pressed` para estados de toggle
+- `aria-expanded` para elementos expansíveis
+
+```vue
+<button 
+  :aria-label="`Filtrar por ${categoria}`"
+  :aria-pressed="ativo"
+  @click="filtrar"
+>
+  <IconeCategoria />
+</button>
+```
+
+### Navegação por Teclado
+- Todos os elementos interativos devem ser acessíveis via teclado
+- Ordem de foco lógica
+- Indicadores visuais de foco
+
+## Performance Mobile
+
+### Imagens
+- Sempre usar `loading="lazy"` para imagens
+- Otimizar tamanhos para diferentes densidades
+- Placeholder enquanto carrega
+
+### Listas e Componentes
+- `v-memo` para listas grandes
+- Skeleton loading states
+- Evitar re-renderizações desnecessárias
+
+```vue
+<!-- Performance otimizada -->
+<CardItem 
+  v-for="item in items"
+  v-memo="[item.id, item.status, item.updated_at]"
+  :key="item.id"
+  :item="item"
+/>
+```
+
 ## Commits e Documentação
 
 ### Mensagens de Commit

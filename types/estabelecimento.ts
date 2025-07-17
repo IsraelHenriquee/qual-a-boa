@@ -1,7 +1,7 @@
 export interface Categoria {
   id: number
   categoria: string | null
-  icone?: string | null // Nome do ícone flat vindo do banco
+  icone?: string | null // o icone é um emogi 
 }
 
 export interface Subcategoria {

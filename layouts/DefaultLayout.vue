@@ -1,9 +1,9 @@
 <template>
   <div 
-    class="min-h-screen flex flex-col bg-background-light dark:bg-background-dark pb-14"
+    class="min-h-screen flex flex-col bg-background-light dark:bg-background-dark"
     :style="nativePadding"
   >
-    <main class="flex-1 w-full max-w-2xl mx-auto">
+    <main class="flex-1 w-full max-w-2xl mx-auto pb-20">
       <slot />
     </main>
     <Navbar />
@@ -30,7 +30,4 @@ const nativePadding = computed(() => {
   }
   return {}
 })
-
-// Usa o composable de tema para status bar dinâmica
-const { isDarkMode, updateStatusBarColor } = useTheme()
 </script>

@@ -1,9 +1,10 @@
 <template>
-  <div class="h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background-light to-accent/10 dark:from-background-dark dark:via-background-dark dark:to-background-dark p-4 overflow-hidden">
+  <div class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4 overflow-hidden">
     <!-- Background decoration -->
     <div class="absolute inset-0 overflow-hidden">
-      <div class="absolute -top-40 -right-40 w-80 h-80 bg-primary/20 rounded-full blur-3xl"></div>
-      <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-accent/20 rounded-full blur-3xl"></div>
+      <!-- Elementos decorativos sutis e modernos -->
+      <div class="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl dark:bg-primary/3"></div>
+      <div class="absolute bottom-0 left-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl dark:bg-accent/3"></div>
     </div>
     
     <div class="relative z-10">

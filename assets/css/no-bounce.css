@@ -1,0 +1,21 @@
+/* Desativa o efeito de rolagem elástica (bounce) no macOS e iOS */
+html, body {
+  height: 100%;
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+
+.content-container {
+  height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch; /* Para rolagem suave no iOS */
+  overscroll-behavior: none; /* Previne o efeito de bounce em navegadores modernos */
+  -ms-scroll-chaining: none; /* Para IE/Edge */
+}
+
+/* Desativa o efeito de bounce em elementos com rolagem */
+.scroll-container {
+  overscroll-behavior: none;
+  -ms-scroll-chaining: none;
+}

@@ -49,7 +49,7 @@
 ### Styling
 - Tailwind CSS classes
 - Scoped styles quando necessário
-- Variáveis CSS customizadas para temas
+- Variáveis CSS customizadas para temas somente se necessário
 - Mobile-first responsive design
 
 ### TypeScript
@@ -137,3 +137,33 @@ const buscarDados = async () => {
   }
 }
 ```
+
+## Padrões de Performance
+
+### Otimização de Listas
+- Usar `v-memo` para listas grandes com dados que mudam pouco
+- Lazy loading para imagens com `loading="lazy"`
+- Skeleton loading states para melhor UX
+
+```vue
+<!-- v-memo para cache inteligente -->
+<CardEstabelecimento 
+  v-for="item in lista"
+  v-memo="[item.id, item.status]"
+  :key="item.id"
+  :item="item"
+/>
+
+<!-- Lazy loading para imagens -->
+<img :src="imagem" loading="lazy" />
+```
+
+### Error Handling
+- Sempre tratar erros de forma consistente
+- Usar toast notifications ou modals para feedback
+- Fallbacks visuais para estados de erro
+
+### Loading States
+- Skeleton loading para componentes pesados
+- Estados de loading específicos por ação
+- Feedback visual imediato para interações
